@@ -7,6 +7,7 @@ class DisplayWindow:
 
     def __init__(self):
         self.root = Tk()
+        self.root.resizable(0, 0)
 
         self.inner_window = Frame(self.root)
         self.inner_window.pack()
@@ -36,8 +37,12 @@ class DisplayWindow:
 
         if self.selected_contributor is not None:
 
-            contribution_percent = self.contributor[1]/(self.contributor[1]+self.contributor[2])*100
-            contribution_slice = self.contributor[1]/(self.contributor[1]+self.contributor[2])*359.999
+            ratio = 1
+            if self.contributor[1] != 0 != self.contributor[2]:
+                ratio = self.contributor[1]/(self.contributor[1]+self.contributor[2])
+
+            contribution_percent = ratio*100
+            contribution_slice = ratio*359.999
             lobby_slice = -359.999 + contribution_slice
 
             if contribution_slice > 0.01:

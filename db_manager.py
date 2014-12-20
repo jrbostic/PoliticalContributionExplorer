@@ -103,7 +103,7 @@ def get_lobbies(name):
 
 
 
-conn, cursor = open_conn()
+# conn, cursor = open_conn()
 # cursor.execute('SELECT COUNT(*) FROM CONTRIBUTORS')
 # print cursor.fetchall()
 # cursor.execute('SELECT COUNT(*) FROM CONTRIBUTIONS')
@@ -113,7 +113,7 @@ conn, cursor = open_conn()
 # cursor.execute('SELECT * FROM LOBBIES WHERE contributor_name like "%Dairy Farmers of America%"')
 # for each in cursor.fetchall():
 #     print each
-get_contributor_names('')
-close_conn(conn, cursor)
+# get_contributor_names('')
+# close_conn(conn, cursor)
 
 
