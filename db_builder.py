@@ -19,7 +19,7 @@ API_KEY = '37fcf779b2674edba2ca46da7277c3be'
 MAX_PAGES = 250
 
 # the year for which results are desired
-YEAR = '2014'
+YEAR = '2010'
 
 # the minimum contribution or lobby dollars relevant
 MIN_AMOUNT = 10000
@@ -48,7 +48,7 @@ def get_contributions(api_key, page, year, per_page=10000, min_amount=0):
                                               .format(api_key, page, per_page, year, min_amount)))
         except urllib.error.URLError:
 
-            # ten shots to connect (maybe too high)
+            # ten shots to connect (maybe too high but is rare event)
             if attempts >= 10:
                 raise Exception("Unexpected problem communicating with API server.")
             sleep(1)
@@ -78,7 +78,7 @@ def get_lobbies(api_key, page, year, per_page=10000, min_amount=0):
                                               .format(api_key, page, per_page, year, min_amount)))
         except urllib.error.URLError:
 
-            # ten shots to connect (maybe too high)
+            # ten shots to connect (maybe too high but is rare event)
             if attempts >= 10:
                 raise Exception("Unexpected problem communicating with APIs server.")
             sleep(1)

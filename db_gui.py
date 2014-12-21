@@ -205,7 +205,8 @@ class DisplayWindow:
                command=lambda sel=self.select_list: set_selection(sel)).pack(side=LEFT, expand=1)
         Button(scroll_window, text="Cancel", command=scroll_window.destroy).pack(side=RIGHT, expand=1)
 
-    def get_available_years(self):
+    @staticmethod
+    def get_available_years():
         """Produce a sorted tuple of available database years.
 
         :return: tuple of strings containing sorted database years available to search
