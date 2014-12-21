@@ -35,6 +35,7 @@ def get_contributions(api_key, page, year, per_page=10000, min_amount=0):
     :param min_amount: the minimum dollar contribution desired
     :return: list of dicts representing individual political contributions
     """
+
     result = None
     attempts = 0
     while result is None:
@@ -60,6 +61,7 @@ def get_lobbies(api_key, page, year, per_page=10000, min_amount=0):
     :param min_amount: the minimum dollar lobby desired
     :return: list of dicts representing individual lobby instances
     """
+
     result = None
     attempts = 0
     while result is None:

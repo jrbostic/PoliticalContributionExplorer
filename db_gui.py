@@ -204,6 +204,10 @@ class DisplayWindow:
         Button(scroll_window, text="Cancel", command=scroll_window.destroy).pack(side=RIGHT, expand=1)
 
     def get_available_years(self):
+        """Produce a list of available database years.
+
+        :return: list of strings (database years available to search)
+        """
         matcher = re.compile('^influence(\d{4}).db$')
         local_files = os.listdir(os.curdir)
         valid_dbs = []
