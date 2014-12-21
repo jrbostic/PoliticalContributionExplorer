@@ -3,8 +3,15 @@ import sqlite3
 __author__ = 'jessebostic'
 
 
-def open_conn():
-    conn = sqlite3.connect('influence.db')
+def open_conn(db_year=None):
+
+    conn = None
+
+    if db_year is None:
+        conn = sqlite3.connect('influence.db')
+    else:
+        conn = sqlite3.connect('influence{}.db'.format(db_year))
+
     cursor = conn.cursor()
     return conn, cursor
 
@@ -68,8 +75,8 @@ def insert_lobby(values, cursor):
             cursor.execute('INSERT INTO LOBBIES VALUES (?,?)', (values[0], values[1][i]))
 
 
-def get_contributor_names(like):
-    conn, cursor = open_conn()
+def get_contributor_names(like, year):
+    conn, cursor = open_conn(year)
     cursor.execute('SELECT contributor_name FROM CONTRIBUTORS '
                    'WHERE contributor_name LIKE ("%"||?||"%") ORDER BY contributor_name', (like,))
     name_list = cursor.fetchall()
@@ -77,16 +84,16 @@ def get_contributor_names(like):
     return [entry[0] for entry in name_list]
 
 
-def get_contributor(name):
-    conn, cursor = open_conn()
+def get_contributor(name, year):
+    conn, cursor = open_conn(year)
     cursor.execute('SELECT * FROM CONTRIBUTORS WHERE contributor_name = ?', (name,))
     contributor = cursor.fetchone()
     close_conn(conn, cursor)
     return contributor
 
 
-def get_contributions(name):
-    conn, cursor = open_conn()
+def get_contributions(name, year):
+    conn, cursor = open_conn(year)
     cursor.execute('SELECT recipient_name, contribution_amount FROM CONTRIBUTIONS '
                    'WHERE contributor_name = ? ORDER BY recipient_name', (name,))
     contributions = cursor.fetchall()
@@ -94,8 +101,8 @@ def get_contributions(name):
     return contributions
 
 
-def get_lobbies(name):
-    conn, cursor = open_conn()
+def get_lobbies(name, year):
+    conn, cursor = open_conn(year)
     cursor.execute('SELECT recipient_name FROM LOBBIES WHERE contributor_name = ? ORDER BY recipient_name', (name,))
     lobbies = cursor.fetchall()
     close_conn(conn, cursor)

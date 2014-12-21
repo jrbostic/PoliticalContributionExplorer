@@ -1,8 +1,9 @@
 """Provides GUI for exploring political influence database."""
 
 from Tkinter import *
+import os
 import db_manager
-
+import re
 __author__ = 'jessebostic'
 
 class DisplayWindow:
@@ -25,14 +26,24 @@ class DisplayWindow:
         self.inner_window = Frame(self.root)
         self.inner_window.pack()
 
+        # setup input box for search
         self.entry = Entry(self.inner_window)
         self.entry.grid(column=0, row=0, sticky=NSEW)
         self.entry.bind('<Return>', self.create_selection_window)
         self.entry.focus_set()
 
-        self.button = Button(self.inner_window, text="FIND CONTRIBUTOR", command=self.create_selection_window)
-        self.button.grid(column=1, row=0, sticky=NSEW)
+        # setup year selection box
+        self.year_options = self.get_available_years()
+        self.year_var = StringVar(self.inner_window)
+        self.year_var.set(self.year_options[0])
+        self.year_option_menu = apply(OptionMenu, (self.inner_window, self.year_var) + self.year_options)
+        self.year_option_menu.grid(column=1, row=0, sticky=NSEW)
 
+        # setup search button
+        self.button = Button(self.inner_window, text="FIND CONTRIBUTOR", command=self.create_selection_window)
+        self.button.grid(column=2, row=0, sticky=NSEW)
+
+        # canvas for drawing data rep
         self.canvas = Canvas(self.root, width=800, height=500)
         self.canvas.pack()
 
@@ -154,10 +165,13 @@ class DisplayWindow:
             """
 
             if select_list.curselection() != ():
+
+                year_selected = self.year_var.get()
+
                 self.selected_contributor = select_list.get(select_list.curselection())
-                self.contributor = db_manager.get_contributor(self.selected_contributor)
-                self.contributions = db_manager.get_contributions(self.selected_contributor)
-                self.lobbies = db_manager.get_lobbies(self.selected_contributor)
+                self.contributor = db_manager.get_contributor(self.selected_contributor, year_selected)
+                self.contributions = db_manager.get_contributions(self.selected_contributor, year_selected)
+                self.lobbies = db_manager.get_lobbies(self.selected_contributor, year_selected)
 
                 self.render_display()
 
@@ -167,7 +181,7 @@ class DisplayWindow:
 
                 scroll_window.destroy()
 
-        results = db_manager.get_contributor_names(self.entry.get())
+        results = db_manager.get_contributor_names(self.entry.get(), self.year_var.get())
 
         # creates selection window along with x and y scroll bars
         scroll_window = Toplevel(self.root)
@@ -193,6 +207,16 @@ class DisplayWindow:
         Button(scroll_window, text="Select",
                command=lambda sel=self.select_list: set_selection(sel)).pack(side=LEFT, expand=1)
         Button(scroll_window, text="Cancel", command=scroll_window.destroy).pack(side=RIGHT, expand=1)
+
+    def get_available_years(self):
+        matcher = re.compile('^influence(\d{4}).db$')
+        local_files = os.listdir(os.curdir)
+        valid_dbs = []
+        for file in local_files:
+            data_year = matcher.findall(file)
+            if len(data_year):
+                valid_dbs.append(data_year[0])
+        return tuple(sorted(valid_dbs))
 
 if __name__ == "__main__":
     DisplayWindow()

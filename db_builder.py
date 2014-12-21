@@ -8,6 +8,7 @@ May be imported to gain access to json api call wrappers for retrieving politica
 import urllib
 import ujson as json
 import db_manager
+from time import sleep
 
 __author__ = 'jessebostic'
 
@@ -18,13 +19,13 @@ API_KEY = '37fcf779b2674edba2ca46da7277c3be'
 MAX_PAGES = 250
 
 # the year for which results are desired
-YEAR = '2013'
+YEAR = '2014'
 
 # the minimum contribution or lobby dollars relevant
 MIN_AMOUNT = 10000
 
 
-def get_contributions(api_key, page, year, per_page=1000, min_amount=0):
+def get_contributions(api_key, page, year, per_page=10000, min_amount=0):
     """Returns list of dictionaries representing respective political contribution records.
 
     :param api_key: the api key to use on access
@@ -34,13 +35,22 @@ def get_contributions(api_key, page, year, per_page=1000, min_amount=0):
     :param min_amount: the minimum dollar contribution desired
     :return: list of dicts representing individual political contributions
     """
+    result = None
+    attempts = 0
+    while result is None:
+        attempts += 1
+        try:
+            result = json.load(urllib.urlopen('http://transparencydata.com/api/1.0/contributions.json?apikey=' +
+                                              '{}&page={}&per_page={}&cycle={}&amount=>|{}'
+                                              .format(api_key, page, per_page, year, min_amount)))
+        except urllib.error.URLError:
+            if attempts >= 10:
+                raise Exception("There's a problem communicating with API server.")
+            sleep(1)
 
-    result = json.load(urllib.urlopen('http://transparencydata.com/api/1.0/contributions.json?apikey=' +
-                                      '{}&page={}&per_page={}&cycle={}&amount=>|{}'
-                                      .format(api_key, page, per_page, year, min_amount)))
     return result
 
-def get_lobbies(api_key, page, year, per_page=100, min_amount=0):
+def get_lobbies(api_key, page, year, per_page=10000, min_amount=0):
     """Returns list of dictionaries representing respective political lobby records.
 
     :param api_key: the api key to use on access
@@ -50,10 +60,19 @@ def get_lobbies(api_key, page, year, per_page=100, min_amount=0):
     :param min_amount: the minimum dollar lobby desired
     :return: list of dicts representing individual lobby instances
     """
+    result = None
+    attempts = 0
+    while result is None:
+        attempts += 1
+        try:
+            result = json.load(urllib.urlopen('http://transparencydata.com/api/1.0/lobbying.json?apikey=' +
+                                              '{}&page={}&per_page={}&year={}&amount=>|{}'
+                                              .format(api_key, page, per_page, year, min_amount)))
+        except urllib.error.URLError:
+            if attempts >= 10:
+                raise Exception("There's a problem communicating with APIs server.")
+            sleep(1)
 
-    result = json.load(urllib.urlopen('http://transparencydata.com/api/1.0/lobbying.json?apikey=' +
-                                      '{}&page={}&per_page={}&year={}&amount=>|{}'
-                                      .format(api_key, page, per_page, year, min_amount)))
     return result
 
 if __name__ == "__main__":
