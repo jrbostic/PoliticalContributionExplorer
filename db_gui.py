@@ -174,11 +174,6 @@ class DisplayWindow:
                 self.lobbies = db_manager.get_lobbies(self.selected_contributor, year_selected)
 
                 self.render_display()
-
-                print self.contributor
-                print self.contributions
-                print self.lobbies
-
                 scroll_window.destroy()
 
         results = db_manager.get_contributor_names(self.entry.get(), self.year_var.get())
