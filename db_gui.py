@@ -2,9 +2,11 @@
 
 from Tkinter import *
 import os
-import db_manager
 import re
+import db_manager
+
 __author__ = 'jessebostic'
+
 
 class DisplayWindow:
     """Class providing a graphical interface for exploring specific contributor
@@ -58,7 +60,7 @@ class DisplayWindow:
         self.root.mainloop()
 
     def render_display(self):
-        """Updates all graphical contents of canvas.  Uses clunky placement calculations which could/should
+        """Updates all graphical contents of canvas.  Uses clunky placement calculations which can/should
         be simplified and refactored on next iteration.
          """
 
@@ -139,10 +141,10 @@ class DisplayWindow:
         x = self.recipient_listbox.winfo_rootx()+10
         y = self.recipient_listbox.winfo_rooty()/5
         height = self.recipient_listbox.winfo_height()
-        geom = "%dx%d+%d+%d" % (300, 100, x,y+height)
+        geom = "%dx%d+%d+%d" % (300, 100, x, y+height)
         recipient_window.geometry(geom)
 
-        # retrieve and insert data particulars
+        # retrieve and insert data particulars into recipient window
         recipient_name = self.recipient_listbox.get(self.recipient_listbox.curselection())
         recipient_tuple = None
         for entry in self.contributions:
@@ -158,7 +160,7 @@ class DisplayWindow:
         """
 
         def set_selection(select_list):
-            """If an item has been selected in Listbox, sets DisplayWindow instance fields to appropriate values,
+            """If an item has been selected in Listbox, sets instance fields to appropriate values,
             fires off graphical display repaint, and destroys selection window.
 
             :param select_list: contributor Listbox to get user selection from
@@ -204,17 +206,21 @@ class DisplayWindow:
         Button(scroll_window, text="Cancel", command=scroll_window.destroy).pack(side=RIGHT, expand=1)
 
     def get_available_years(self):
-        """Produce a list of available database years.
+        """Produce a sorted tuple of available database years.
 
-        :return: list of strings (database years available to search)
+        :return: tuple of strings containing sorted database years available to search
         """
+
+        # matches local file names against regular expression to parse available db years
         matcher = re.compile('^influence(\d{4}).db$')
         local_files = os.listdir(os.curdir)
         valid_dbs = []
-        for file in local_files:
-            data_year = matcher.findall(file)
+
+        for a_file in local_files:
+            data_year = matcher.findall(a_file)
             if len(data_year):
                 valid_dbs.append(data_year[0])
+
         return tuple(sorted(valid_dbs))
 
 if __name__ == "__main__":

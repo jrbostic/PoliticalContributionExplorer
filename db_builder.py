@@ -41,12 +41,16 @@ def get_contributions(api_key, page, year, per_page=10000, min_amount=0):
     while result is None:
         attempts += 1
         try:
+
+            # grabs json response and loads into data structure result
             result = json.load(urllib.urlopen('http://transparencydata.com/api/1.0/contributions.json?apikey=' +
                                               '{}&page={}&per_page={}&cycle={}&amount=>|{}'
                                               .format(api_key, page, per_page, year, min_amount)))
         except urllib.error.URLError:
+
+            # ten shots to connect (maybe too high)
             if attempts >= 10:
-                raise Exception("There's a problem communicating with API server.")
+                raise Exception("Unexpected problem communicating with API server.")
             sleep(1)
 
     return result
@@ -67,18 +71,23 @@ def get_lobbies(api_key, page, year, per_page=10000, min_amount=0):
     while result is None:
         attempts += 1
         try:
+
+            # grabs json response and loads into data structure result
             result = json.load(urllib.urlopen('http://transparencydata.com/api/1.0/lobbying.json?apikey=' +
                                               '{}&page={}&per_page={}&year={}&amount=>|{}'
                                               .format(api_key, page, per_page, year, min_amount)))
         except urllib.error.URLError:
+
+            # ten shots to connect (maybe too high)
             if attempts >= 10:
-                raise Exception("There's a problem communicating with APIs server.")
+                raise Exception("Unexpected problem communicating with APIs server.")
             sleep(1)
 
     return result
 
 if __name__ == "__main__":
 
+    # creates a new influence.db file and tables
     db_manager.create_tables()
 
     # grab contributions and insert into db
@@ -90,7 +99,7 @@ if __name__ == "__main__":
         if len(result_list) == 0:
             break
 
-        print('Populating...')
+        print('Populating database...')
         conn, cursor = db_manager.open_conn()
         for contribution in result_list:
             db_manager.insert_contribution((contribution['contributor_name'], contribution['recipient_name'],
@@ -106,7 +115,7 @@ if __name__ == "__main__":
         if len(result_list) == 0:
             break
 
-        print('Populating...')
+        print('Populating database...')
         conn, cursor = db_manager.open_conn()
         for lobby in result_list:
             db_manager.insert_lobby((lobby['client_name'], [agency['agency_name'] for agency in lobby['agencies']],
