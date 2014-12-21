@@ -79,7 +79,6 @@ def insert_contribution(values, cursor):
         cursor.execute('INSERT INTO CONTRIBUTIONS VALUES (?, ?, ?)', values)
 
 
-
 def insert_lobby(values, cursor):
     """Inserts or updates entries in CONTRIBUTORS and LOBBIES tables
 
@@ -170,6 +169,3 @@ def get_lobbies(contributor_name, year):
     close_conn(conn, cursor)
 
     return lobbies
-
-
-

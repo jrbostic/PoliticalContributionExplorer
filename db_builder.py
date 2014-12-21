@@ -5,8 +5,8 @@ be sent to api in the db creation script.
 May be imported to gain access to json api call wrappers for retrieving political contributions and lobbies.
 """
 
-import urllib
-import ujson as json
+import urllib2
+import json
 import db_manager
 from time import sleep
 
@@ -43,10 +43,10 @@ def get_contributions(api_key, page, year, per_page=10000, min_amount=0):
         try:
 
             # grabs json response and loads into data structure result
-            result = json.load(urllib.urlopen('http://transparencydata.com/api/1.0/contributions.json?apikey=' +
-                                              '{}&page={}&per_page={}&cycle={}&amount=>|{}'
-                                              .format(api_key, page, per_page, year, min_amount)))
-        except urllib.error.URLError:
+            result = json.load(urllib2.urlopen('http://transparencydata.com/api/1.0/contributions.json?apikey=' +
+                                               '{}&page={}&per_page={}&cycle={}&amount=>|{}'
+                                               .format(api_key, page, per_page, year, min_amount)))
+        except urllib2.URLError, urllib2.HTTPError:
 
             # ten shots to connect (maybe too high but is rare event)
             if attempts >= 10:
@@ -54,6 +54,7 @@ def get_contributions(api_key, page, year, per_page=10000, min_amount=0):
             sleep(1)
 
     return result
+
 
 def get_lobbies(api_key, page, year, per_page=10000, min_amount=0):
     """Returns list of dictionaries representing respective political lobby records.
@@ -73,10 +74,10 @@ def get_lobbies(api_key, page, year, per_page=10000, min_amount=0):
         try:
 
             # grabs json response and loads into data structure result
-            result = json.load(urllib.urlopen('http://transparencydata.com/api/1.0/lobbying.json?apikey=' +
-                                              '{}&page={}&per_page={}&year={}&amount=>|{}'
-                                              .format(api_key, page, per_page, year, min_amount)))
-        except urllib.error.URLError:
+            result = json.load(urllib2.urlopen('http://transparencydata.com/api/1.0/lobbying.json?apikey=' +
+                                               '{}&page={}&per_page={}&year={}&amount=>|{}'
+                                               .format(api_key, page, per_page, year, min_amount)))
+        except urllib2.URLError, urllib2.HTTPError:
 
             # ten shots to connect (maybe too high but is rare event)
             if attempts >= 10:
