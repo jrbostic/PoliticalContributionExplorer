@@ -1,4 +1,12 @@
-"""Provides GUI for exploring political influence database."""
+"""Provides GUI for exploring political influence database.
+
+Currently supports searching and selecting contributors.  Contributor lobby and contribution
+data is then displayed on either side of window along with a piechart in center.  The recipient
+relationships listed on left side of screen can be double-clicked for additional information.
+Lobby relationships don't support this functionality due to the structure of lobby data--a single
+lobby contribution may be related to multiple government agencies, so there's no one-to-one
+relationship between lobby dollars and a single agency.
+"""
 
 from Tkinter import *
 import os
