@@ -1,8 +1,9 @@
 PROJECT DEPENDENCIES
 
-For this project Python 2.7 was used along with mostly pre-packaged modules.
+- Python 2.7
+- Tkinter
 
-The most likely module not to be packaged with your distribution is the tkinter gui toolbox.  There is no pip package available to my knowledge. The easiest ways to install are as follows...
+For this project Python 2.7 was used along with mostly pre-packaged modules.  The most likely module not to be packaged with your distribution is the tkinter gui toolbox.  There is no pip package available to my knowledge. The easiest ways to install are as follows...
 
 On Ubuntu:
 apt-get install python-tk
@@ -10,7 +11,10 @@ apt-get install python-tk
 On Fedora:
 yum install tkinter
 
-I'm not aware of any other dependencies that are not naturally packaged with Python 2.7 distributions.
+On Mac (more complicated):
+see -->  https://www.python.org/download/mac/tcltk/
+
+I'm not aware of any other dependencies that are not normally packaged with Python 2.7 distributions.
 
 
 PROJECT CONCEPT
