@@ -86,40 +86,35 @@ class DisplayWindow:
             contribution_slice = ratio*359.999
             lobby_slice = -359.999 + contribution_slice
 
+            win_width = self.root.winfo_width()
+            win_height = self.root.winfo_height()
+
             # create pie slices in center of window
             if contribution_slice > 0.001:
-                self.canvas.create_arc(self.root.winfo_width()/2-50, self.root.winfo_height()/2-50,
-                                       self.root.winfo_width()/2+50, self.root.winfo_height()/2+50,
-                                       start=0, extent=contribution_slice, fill='blue',
-                                       activefill='green', outline='white', activeoutline='black', style=PIESLICE)
-                self.canvas.create_text(self.root.winfo_width()/2+26, self.root.winfo_height()/2-5,
+                self.canvas.create_arc(win_width*.4, win_height*.3, win_width*.6, win_height*.6, start=0,
+                                       extent=contribution_slice, fill='blue', activefill='green', outline='white',
+                                       activeoutline='black', style=PIESLICE)
+                self.canvas.create_text(win_width*.55, win_height*.44,
                                         text='{:.1f}%'.format(contribution_percent), fill='blue')
 
             if lobby_slice < -0.001:
-                self.canvas.create_arc(self.root.winfo_width()/2-50, self.root.winfo_height()/2-50,
-                                       self.root.winfo_width()/2+50, self.root.winfo_height()/2+50,
-                                       start=0, extent=lobby_slice, fill='red',
-                                       activefill='green', outline='white', activeoutline='black', style=PIESLICE)
-                self.canvas.create_text(self.root.winfo_width()/2+26, self.root.winfo_height()/2+10,
+                self.canvas.create_arc(win_width*.4, win_height*.3, win_width*.6, win_height*.6, start=0,
+                                       extent=lobby_slice, fill='red', activefill='green', outline='white',
+                                       activeoutline='black', style=PIESLICE)
+                self.canvas.create_text(win_width*.55, win_height*.47,
                                         text='{:.1f}%'.format(100-contribution_percent), fill='red')
 
             # non-piechart display elements in center of window
-            self.canvas.create_text(self.root.winfo_width()/2, self.root.winfo_height()/10,
-                                    text=self.selected_contributor)
-            self.canvas.create_text(self.root.winfo_width()/2, self.root.winfo_height()/10+20,
+            self.canvas.create_text(win_width*.5, win_height*.1, text=self.selected_contributor)
+            self.canvas.create_text(win_width*.5, win_height*.14,
                                     text='Total: ${:,.2f}'.format(self.contributor[1]+self.contributor[2]))
-            self.canvas.create_rectangle((self.root.winfo_width()/10)*4, (self.root.winfo_height()/10)*7,
-                                        (self.root.winfo_width()/10)*4+20, (self.root.winfo_height()/10)*7+15,
-                                         fill='blue')
-            self.canvas.create_text((self.root.winfo_width()/10)*5, (self.root.winfo_height()/10)*7+8,
-                                    text='Contributions')
-            self.canvas.create_rectangle((self.root.winfo_width()/10)*4, (self.root.winfo_height()/10)*7.5,
-                                        (self.root.winfo_width()/10)*4+20, (self.root.winfo_height()/10)*7.5+15,
-                                         fill='red')
-            self.canvas.create_text((self.root.winfo_width()/10)*5, (self.root.winfo_height()/10)*7.5+8, text='Lobbies')
+            self.canvas.create_rectangle(win_width*.4, win_height*.7, win_width*.44, win_height*.73, fill='blue')
+            self.canvas.create_text(win_width*.52, win_height*.715, text='Contributions')
+            self.canvas.create_rectangle(win_width*.4, win_height*.75, win_width*.44, win_height*.78, fill='red')
+            self.canvas.create_text(win_width*.52, win_height*.77, text='Lobbies')
 
             # contributions arrangement at left of window
-            self.canvas.create_text(self.root.winfo_width()/5, self.root.winfo_height()/5,
+            self.canvas.create_text(win_width*.2, win_height*.2,
                                     text='Contributions: ${:,.2f}'.format(self.contributor[1]))
             self.recipient_listbox = Listbox(self.canvas, width=30, height=20)
             self.recipient_listbox.place(relx=.05, rely=.25)
@@ -128,7 +123,7 @@ class DisplayWindow:
             self.recipient_listbox.bind("<Double-Button-1>", self.show_recipient)
 
             # lobbies arrangement at right of window
-            self.canvas.create_text((self.root.winfo_width()/5)*4, self.root.winfo_height()/5,
+            self.canvas.create_text(win_width*.8, win_height*.2,
                                     text='Lobbies: ${:,.2f}'.format(self.contributor[2]))
             agency_listbox = Listbox(self.canvas, width=30, height=20)
             agency_listbox.place(relx=.65, rely=.25)
