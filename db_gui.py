@@ -22,10 +22,7 @@ class DisplayWindow:
     """
 
     def __init__(self):
-        """Sets up tkinter components, geometry managers, bindings, and instance-level members.
-
-        :return: new DisplayWindow instance
-        """
+        """Sets up tkinter components, geometry managers, bindings, and instance-level members."""
 
         # master widget
         self.root = Tk()
