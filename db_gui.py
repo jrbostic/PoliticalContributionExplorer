@@ -65,11 +65,7 @@ class DisplayWindow:
         self.root.mainloop()
 
     def render_display(self):
-        """Updates all graphical contents of canvas based on object state.
-
-        Uses clunky placement calculations which can/should be
-        simplified and refactored on next iteration.
-         """
+        """Updates all graphical contents of canvas based on object state."""
 
         self.canvas.delete('all')
 
